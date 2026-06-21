@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Hafal Pinyin 1–100</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif;margin:0;padding:0;}
+body{background:linear-gradient(135deg,#eef2ff 0%,#f0fdf4 50%,#fdf4ff 100%);min-height:100vh;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-10px)}30%{transform:translateX(10px)}45%{transform:translateX(-8px)}60%{transform:translateX(8px)}75%{transform:translateX(-4px)}90%{transform:translateX(4px)}}
+.shake{animation:shake 0.45s ease;}
+input[type=text]{-webkit-appearance:none;appearance:none;font-family:inherit;}
+::-webkit-scrollbar{width:0;}
+button{font-family:inherit;cursor:pointer;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const VOCAB=[
+  {no:1,pinyin:"ài qíng",id:"Asmara"},{no:2,pinyin:"ài hào",id:"Hobi"},{no:3,pinyin:"bàn yè",id:"Dini hari"},
+  {no:4,pinyin:"bàn xiǎo shí",id:"Setengah jam"},{no:5,pinyin:"bìng rén",id:"Pasien"},{no:6,pinyin:"bìng qíng",id:"Sakit Perasaan"},
+  {no:7,pinyin:"bìng dú",id:"Virus"},{no:8,pinyin:"cài dān",id:"Menu"},{no:9,pinyin:"cài dāo",id:"Pisau dapur"},
+  {no:10,pinyin:"chá yè",id:"Daun teh"},{no:11,pinyin:"pào chá",id:"Seduh teh"},{no:12,pinyin:"chē fū",id:"Sopir"},
+  {no:13,pinyin:"chī yào",id:"Minum obat"},{no:14,pinyin:"diǎn míng",id:"Absensi"},{no:15,pinyin:"diǎn tóu",id:"Ngangguk kpl"},
+  {no:16,pinyin:"diǎn huǒ",id:"Nyala api, start"},{no:17,pinyin:"diǎn xin",id:"Snack"},{no:18,pinyin:"diàn tī",id:"Lift"},
+  {no:19,pinyin:"diàn chí",id:"Baterai"},{no:20,pinyin:"duì dài",id:"Terhadap"},{no:21,pinyin:"duì shǒu",id:"Saingan (lawan)"},
+  {no:22,pinyin:"duì huà",id:"Dialog"},{no:23,pinyin:"duō shù",id:"Total"},{no:24,pinyin:"fáng zi",id:"Rumah"},
+  {no:25,pinyin:"fēi cháng",id:"Sangat sangat"},{no:26,pinyin:"fēi fǎ",id:"Ilegal"},{no:27,pinyin:"fēn xiǎng",id:"Membagi"},
+  {no:28,pinyin:"fēn bié",id:"Perbedaan"},{no:29,pinyin:"fēn shǒu",id:"Putus cinta"},{no:30,pinyin:"fēn kāi",id:"Lepas"},
+  {no:31,pinyin:"fēn lèi",id:"Beda jenis"},{no:32,pinyin:"fēn míng",id:"Keterangan"},{no:33,pinyin:"gāo shǒu",id:"Orang ahli"},
+  {no:34,pinyin:"gāo dù",id:"Ketinggian"},{no:35,pinyin:"gāo jí",id:"Kelas tinggi, vip"},{no:36,pinyin:"gāo zhōng",id:"SMA"},
+  {no:37,pinyin:"gē shēng",id:"Penyanyi"},{no:38,pinyin:"gē xīng",id:"Artis nyanyi"},{no:39,pinyin:"gōng bù",id:"Pengumuman"},
+  {no:40,pinyin:"gōng píng",id:"Adil"},{no:41,pinyin:"gōng zǐ",id:"Tuan muda"},{no:42,pinyin:"gōng zī",id:"Gaji"},
+  {no:43,pinyin:"gōng jù",id:"Peralatan kerja"},{no:44,pinyin:"gōng chǎng",id:"Gudang"},{no:45,pinyin:"gōng rén",id:"Pekerja"},
+  {no:46,pinyin:"guì rén",id:"Tuan penolong"},{no:47,pinyin:"guì bīn",id:"Tamu terhormat"},{no:48,pinyin:"guì fēi",id:"Selir"},
+  {no:49,pinyin:"guó jiā",id:"Negara"},{no:50,pinyin:"guó jì",id:"Internasional"},{no:51,pinyin:"hàn jiān",id:"Pengkhianat - cina"},
+  {no:52,pinyin:"hǎo hǎo",id:"Baik - baik"},{no:53,pinyin:"hǎo xiàng",id:"Seperti"},{no:54,pinyin:"hào qí",id:"Penasaran"},
+  {no:55,pinyin:"hé píng",id:"Tentram"},{no:56,pinyin:"hé xié",id:"Harmonis"},{no:57,pinyin:"hòu lái",id:"Kemudian"},
+  {no:58,pinyin:"hòu huǐ",id:"Menyesal"},{no:59,pinyin:"hào mǎ",id:"Nomor"},{no:60,pinyin:"hòu tiān",id:"Lusa"},
+  {no:61,pinyin:"hòu dài",id:"Generasi"},{no:62,pinyin:"hòu shì",id:"Keturunan"},{no:63,pinyin:"hòu rén",id:"Keturunan"},
+  {no:64,pinyin:"huí dá",id:"Menjawab"},{no:65,pinyin:"huí lai",id:"Kembali"},{no:66,pinyin:"huí jiā",id:"Pulang rumah"},
+  {no:67,pinyin:"huí yì",id:"Memori ingat"},{no:68,pinyin:"huí fù",id:"Pulih"},{no:69,pinyin:"huí tóu",id:"Sadar - berbuat"},
+  {no:70,pinyin:"huí bì",id:"Menghindari"},{no:71,pinyin:"huǒ guō",id:"Hotpot"},{no:72,pinyin:"huǒ huā",id:"Petasan"},
+  {no:73,pinyin:"huǒ shāo",id:"Kebakaran"},{no:74,pinyin:"huǒ tuǐ",id:"Ham"},{no:75,pinyin:"jī ròu",id:"Daging ayam"},
+  {no:76,pinyin:"jī chì",id:"Sayap ayam"},{no:77,pinyin:"jī hū",id:"Hampir"},{no:78,pinyin:"jiā tíng",id:"Keluarga"},
+  {no:79,pinyin:"jiā cháng",id:"Kepala keluarga"},{no:80,pinyin:"jiā xiāng",id:"Kampung halaman"},
+  {no:81,pinyin:"jiǎo pí",id:"Kulit pangsit"},{no:82,pinyin:"jiào zuò",id:"Disebut"},{no:83,pinyin:"jiào xǐng",id:"Membangunkan"},
+  {no:84,pinyin:"kāi shǐ",id:"Mulai"},{no:85,pinyin:"kāi xīn",id:"Sukacita"},{no:86,pinyin:"kāi lǎng",id:"Lapang dada"},
+  {no:87,pinyin:"kàn fǎ",id:"Pandangan"},{no:88,pinyin:"kàn wán",id:"Selesai lihat"},{no:89,pinyin:"kàn dào",id:"Terlihat"},
+  {no:90,pinyin:"kě yǐ",id:"Boleh"},{no:91,pinyin:"kě néng",id:"Mungkin"},{no:92,pinyin:"kě shì",id:"Tetapi"},
+  {no:93,pinyin:"kě ài",id:"Lucu - You mo"},{no:94,pinyin:"kě pà",id:"Menakutkan"},{no:95,pinyin:"kè lián",id:"Menyedihkan"},
+  {no:96,pinyin:"kè chéng",id:"Pelajaran khusus"},{no:97,pinyin:"kè běn",id:"Buku pelajaran"},
+  {no:98,pinyin:"kǒu wèi",id:"Selera"},{no:99,pinyin:"kǒu dài",id:"Saku"},{no:100,pinyin:"kǒu yǔ",id:"Bahasa lisan"},
+];
+
+const TONE3_MAP={'â':'ǎ','ô':'ǒ','û':'ǔ','ê':'ě','î':'ǐ','Â':'ǎ','Ô':'ǒ','Û':'ǔ','Ê':'ě','Î':'ǐ'};
+function norm(s){return s.split('').map(c=>TONE3_MAP[c]||c).join('').trim().toLowerCase().replace(/\s+/g,' ');}
+function speak(text){const u=new SpeechSynthesisUtterance(text);u.lang='zh-CN';speechSynthesis.cancel();speechSynthesis.speak(u);}
+
+const ROUNDS=[
+  {label:"Babak 1",range:"1–25",color:"#6366f1",nos:[...Array(25)].map((_,i)=>i)},
+  {label:"Babak 2",range:"26–50",color:"#10b981",nos:[...Array(25)].map((_,i)=>i+25)},
+  {label:"Babak 3",range:"51–75",color:"#f59e0b",nos:[...Array(25)].map((_,i)=>i+50)},
+  {label:"Babak 4",range:"76–100",color:"#ef4444",nos:[...Array(25)].map((_,i)=>i+75)},
+];
+
+let ST={
+  tab:'flash',
+  flash:{round:null,idx:0,flipped:false,dir:'id2pin',order:[]},
+  quiz:{setup:true,mode:'normal',dir:'id2pin',qs:[],qi:0,ans:'',answered:false,correct:null,score:0,wrongs:[],done:false,curDir:'id2pin'},
+  browse:{q:''}
+};
+
+function h(tag,attrs){
+  const e=document.createElement(tag);
+  const ch=Array.from(arguments).slice(2).flat(99);
+  if(attrs) for(const[k,v] of Object.entries(attrs)){
+    if(k==='style') Object.assign(e.style,v);
+    else if(k.startsWith('on')) e.addEventListener(k.slice(2).toLowerCase(),v);
+    else if(k==='className') e.className=v;
+    else if(k==='disabled') e.disabled=v;
+    else e.setAttribute(k,v);
+  }
+  for(const c of ch){if(c==null)continue;e.appendChild(typeof c==='string'?document.createTextNode(c):c);}
+  return e;
+}
+
+function render(){
+  const app=document.getElementById('app');
+  app.innerHTML='';
+  const tabs=[['flash','🗂️','Flashcard'],['quiz','🎯','Kuis'],['browse','📋','Daftar']];
+  const tabBar=h('div',{style:{display:'flex',background:'rgba(255,255,255,0.8)',borderRadius:'18px',padding:'4px',gap:'4px',marginBottom:'20px',boxShadow:'0 2px 12px rgba(99,102,241,0.08)'}},
+    ...tabs.map(([id,ic,lb])=>{
+      const active=ST.tab===id;
+      const btn=h('button',{style:{flex:'1',padding:'10px 8px',borderRadius:'14px',border:'none',background:active?'linear-gradient(135deg,#6366f1,#8b5cf6)':'transparent',color:active?'#fff':'#94a3b8',fontWeight:'700',fontSize:'13px',transition:'all 0.2s',boxShadow:active?'0 2px 8px rgba(99,102,241,0.3)':'none'},onClick:()=>{ST.tab=id;render();}},
+        h('span',{style:{display:'block',fontSize:'16px'}},ic),lb);
+      return btn;
+    })
+  );
+  let content;
+  if(ST.tab==='flash') content=flashView();
+  else if(ST.tab==='quiz') content=quizView();
+  else content=browseView();
+  app.appendChild(h('div',{style:{minHeight:'100vh',paddingBottom:'80px'}},
+    h('div',{style:{maxWidth:'480px',margin:'0 auto',padding:'20px 16px 0'}},
+      h('div',{style:{textAlign:'center',marginBottom:'20px'}},
+        h('h1',{style:{fontSize:'22px',fontWeight:'900',color:'#1e1b4b',margin:'0'}},'🀄 Hafal Pinyin'),
+        h('p',{style:{color:'#94a3b8',fontSize:'13px',marginTop:'2px'}},'No. 1–100 · Pinyin ↔ Bahasa Indonesia')
+      ),
+      tabBar,content
+    )
+  ));
+}
+
+// ─── FLASHCARD ───
+function flashView(){
+  const f=ST.flash;
+  if(!f.round){
+    return h('div',{style:{maxWidth:'480px',margin:'0 auto',paddingBottom:'32px'}},
+      h('div',{style:{textAlign:'center',marginBottom:'28px'}},
+        h('div',{style:{fontSize:'36px',marginBottom:'6px'}},'🗂️'),
+        h('h2',{style:{fontSize:'20px',fontWeight:'800',color:'#1e1b4b',margin:'0'}},'Flashcard'),
+        h('p',{style:{color:'#94a3b8',fontSize:'13px',marginTop:'4px'}},'Pilih babak untuk mulai belajar')
+      ),
+      h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px'}},
+        ...ROUNDS.map(r=>h('button',{style:{background:`linear-gradient(135deg,${r.color}18,${r.color}08)`,border:`1.5px solid ${r.color}30`,borderRadius:'20px',padding:'20px 16px',textAlign:'center',transition:'all 0.2s'},onClick:()=>{const o=[...r.nos].sort(()=>Math.random()-0.5);ST.flash={round:r,idx:0,flipped:false,dir:'id2pin',order:o};render();}},
+          h('div',{style:{fontSize:'22px',fontWeight:'900',color:r.color}},r.label),
+          h('div',{style:{fontSize:'13px',color:'#64748b',marginTop:'4px',fontWeight:'600'}},`No. ${r.range}`),
+          h('div',{style:{fontSize:'11px',color:'#94a3b8',marginTop:'2px'}},'25 kata')
+        ))
+      ),
+      h('button',{style:{marginTop:'12px',width:'100%',padding:'14px',background:'linear-gradient(135deg,#6366f1,#8b5cf6)',border:'none',borderRadius:'16px',color:'#fff',fontWeight:'800',fontSize:'14px'},onClick:()=>{const r={label:'Semua',range:'1–100',color:'#6366f1',nos:[...Array(100).keys()]};const o=[...r.nos].sort(()=>Math.random()-0.5);ST.flash={round:r,idx:0,flipped:false,dir:'id2pin',order:o};render();}},'🔀 Semua 100 Kata (Acak)')
+    );
+  }
+  const item=VOCAB[f.order[f.idx]];
+  const c=f.round.color;
+  const pct=((f.idx+1)/f.order.length)*100;
+  const cardWrap=h('div',{style:{perspective:'1200px',cursor:'pointer',userSelect:'none'}});
+  const inner=h('div',{style:{transformStyle:'preserve-3d',transition:'transform 0.5s',height:'200px',position:'relative'}});
+  inner.style.transform=f.flipped?'rotateY(180deg)':'none';
+  inner.appendChild(h('div',{style:{backfaceVisibility:'hidden',WebkitBackfaceVisibility:'hidden',position:'absolute',inset:'0',background:'#fff',borderRadius:'24px',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'24px',border:`1.5px solid ${c}20`,boxShadow:'0 8px 40px rgba(99,102,241,0.12)'}},
+    h('span',{style:{fontSize:'10px',fontWeight:'800',color:c,letterSpacing:'2px',textTransform:'uppercase',marginBottom:'12px'}},f.dir==='id2pin'?'BAHASA INDONESIA':'PINYIN'),
+    h('span',{style:{fontSize:f.dir==='id2pin'?'28px':'30px',fontWeight:'800',color:'#1e1b4b',textAlign:'center',lineHeight:'1.3'}},f.dir==='id2pin'?item.id:item.pinyin),
+    h('span',{style:{fontSize:'12px',color:'#cbd5e1',marginTop:'16px'}},'Ketuk untuk lihat jawaban')
+  ));
+  inner.appendChild(h('div',{style:{backfaceVisibility:'hidden',WebkitBackfaceVisibility:'hidden',position:'absolute',inset:'0',background:`linear-gradient(135deg,${c}18,${c}08)`,borderRadius:'24px',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'24px',border:`1.5px solid ${c}40`,transform:'rotateY(180deg)',boxShadow:'0 8px 40px rgba(16,185,129,0.14)'}},
+    h('span',{style:{fontSize:'10px',fontWeight:'800',color:c,letterSpacing:'2px',textTransform:'uppercase',marginBottom:'12px'}},f.dir==='id2pin'?'PINYIN':'BAHASA INDONESIA'),
+    h('span',{style:{fontSize:'30px',fontWeight:'800',color:'#1e1b4b',textAlign:'center',lineHeight:'1.3'}},f.dir==='id2pin'?item.pinyin:item.id),
+    h('span',{style:{fontSize:'12px',color:'#94a3b8',marginTop:'12px'}},`No. ${item.no}`)
+  ));
+  cardWrap.appendChild(inner);
+  cardWrap.addEventListener('click',()=>{ST.flash.flipped=!ST.flash.flipped;inner.style.transform=ST.flash.flipped?'rotateY(180deg)':'none';});
+  return h('div',{style:{maxWidth:'480px',margin:'0 auto',paddingBottom:'32px'}},
+    h('div',{style:{display:'flex',alignItems:'center',gap:'10px',marginBottom:'16px'}},
+      h('button',{style:{background:'none',border:'none',fontSize:'20px',padding:'4px'},onClick:()=>{ST.flash.round=null;render();}},'←'),
+      h('div',{style:{flex:'1'}},
+        h('span',{style:{fontSize:'12px',fontWeight:'800',color:c,letterSpacing:'1px'}},`${f.round.label} · No. ${f.round.range}`),
+        h('div',{style:{height:'4px',background:'#e2e8f0',borderRadius:'2px',marginTop:'4px'}},
+          h('div',{style:{height:'4px',background:`linear-gradient(90deg,${c},${c}99)`,borderRadius:'2px',width:`${pct}%`,transition:'width 0.3s'}})
+        )
+      ),
+      h('span',{style:{fontSize:'12px',fontWeight:'700',color:'#94a3b8'}},`${f.idx+1}/${f.order.length}`)
+    ),
+    h('div',{style:{display:'flex',gap:'8px',marginBottom:'14px'}},
+      h('button',{style:{flex:'1',padding:'8px 12px',background:`${c}15`,border:`1px solid ${c}30`,borderRadius:'10px',fontSize:'12px',fontWeight:'700',color:c},onClick:()=>{ST.flash.dir=f.dir==='id2pin'?'pin2id':'id2pin';render();}},`⇄ ${f.dir==='id2pin'?'ID → Pinyin':'Pinyin → ID'}`),
+      h('button',{style:{padding:'8px 12px',background:'#f1f5f9',border:'1px solid #e2e8f0',borderRadius:'10px',fontSize:'12px',fontWeight:'700',color:'#64748b'},onClick:()=>{ST.flash.order=[...f.order].sort(()=>Math.random()-0.5);ST.flash.idx=0;ST.flash.flipped=false;render();}},'🔀'),
+      h('button',{style:{padding:'8px 12px',background:'#f1f5f9',border:'1px solid #e2e8f0',borderRadius:'10px',fontSize:'12px',fontWeight:'700',color:'#64748b'},onClick:()=>speak(item.pinyin)},'🔊')
+    ),
+    cardWrap,
+    h('div',{style:{display:'flex',gap:'10px',marginTop:'14px'}},
+      h('button',{style:{flex:'1',padding:'12px',background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:'14px',fontWeight:'700',fontSize:'14px',color:'#475569'},onClick:()=>{ST.flash.flipped=false;ST.flash.idx=(f.idx-1+f.order.length)%f.order.length;render();}},'← Sebelum'),
+      h('button',{style:{flex:'1',padding:'12px',background:`linear-gradient(135deg,${c},${c}cc)`,border:'none',borderRadius:'14px',fontWeight:'700',fontSize:'14px',color:'#fff'},onClick:()=>{ST.flash.flipped=false;ST.flash.idx=(f.idx+1)%f.order.length;render();}},'Berikut →')
+    )
+  );
+}
+
+// ─── QUIZ ───
+function quizView(){
+  const q=ST.quiz;
+  if(q.setup){
+    return h('div',{style:{maxWidth:'480px',margin:'0 auto',paddingBottom:'32px'}},
+      h('div',{style:{textAlign:'center',marginBottom:'24px'}},
+        h('div',{style:{fontSize:'36px',marginBottom:'6px'}},'🎯'),
+        h('h2',{style:{fontSize:'20px',fontWeight:'800',color:'#1e1b4b',margin:'0'}},'Kuis'),
+        h('p',{style:{color:'#94a3b8',fontSize:'13px',marginTop:'4px'}},'100 soal acak dari semua kata')
+      ),
+      h('div',{style:{background:'#fff',borderRadius:'24px',padding:'20px',marginBottom:'16px',boxShadow:'0 4px 20px rgba(99,102,241,0.08)'}},
+        h('p',{style:{fontSize:'11px',fontWeight:'800',color:'#6366f1',letterSpacing:'2px',marginBottom:'12px'}},'MODE KUIS'),
+        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'10px'}},
+          ...([['normal','📝','Kuis Normal','Ketik jawaban'],['audio','🔊','Kuis Audio','Dengar, tebak pinyin']].map(([m,ic,lb,sub])=>{
+            const btn=h('button',{style:{padding:'14px 10px',borderRadius:'14px',border:`2px solid ${q.mode===m?'#6366f1':'#e2e8f0'}`,background:q.mode===m?'#eef2ff':'#f8fafc',textAlign:'center',transition:'all 0.15s'},onClick:()=>{ST.quiz.mode=m;render();}},
+              h('div',{style:{fontSize:'22px'}},ic),
+              h('div',{style:{fontSize:'13px',fontWeight:'800',color:q.mode===m?'#6366f1':'#1e1b4b',marginTop:'4px'}},lb),
+              h('div',{style:{fontSize:'11px',color:'#94a3b8',marginTop:'2px'}},sub)
+            );return btn;
+          }))
+        )
+      ),
+      q.mode==='normal'?h('div',{style:{background:'#fff',borderRadius:'24px',padding:'20px',marginBottom:'16px',boxShadow:'0 4px 20px rgba(99,102,241,0.08)'}},
+        h('p',{style:{fontSize:'11px',fontWeight:'800',color:'#6366f1',letterSpacing:'2px',marginBottom:'12px'}},'ARAH SOAL'),
+        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'8px'}},
+          ...([['id2pin','🇮🇩→拼','ID→Pinyin'],['pin2id','拼→🇮🇩','Pinyin→ID'],['random','🔀','Acak']].map(([d,ic,lb])=>{
+            const btn=h('button',{style:{padding:'12px 8px',borderRadius:'12px',border:`2px solid ${q.dir===d?'#6366f1':'#e2e8f0'}`,background:q.dir===d?'#eef2ff':'#f8fafc',textAlign:'center',transition:'all 0.15s'},onClick:()=>{ST.quiz.dir=d;render();}},
+              h('div',{style:{fontSize:'16px'}},ic),
+              h('div',{style:{fontSize:'11px',fontWeight:'700',color:q.dir===d?'#6366f1':'#64748b',marginTop:'3px'}},lb)
+            );return btn;
+          }))
+        )
+      ):null,
+      h('button',{style:{width:'100%',padding:'16px',background:'linear-gradient(135deg,#6366f1,#8b5cf6)',border:'none',borderRadius:'16px',color:'#fff',fontWeight:'800',fontSize:'16px',boxShadow:'0 4px 16px rgba(99,102,241,0.35)'},onClick:()=>{
+        const o=[...Array(100).keys()].sort(()=>Math.random()-0.5);
+        ST.quiz={...ST.quiz,qs:o,qi:0,ans:'',answered:false,correct:null,score:0,wrongs:[],done:false,setup:false};
+        render();
+        if(ST.quiz.mode==='audio') setTimeout(()=>speak(VOCAB[ST.quiz.qs[0]].pinyin),400);
+      }},'Mulai Kuis →')
+    );
+  }
+  if(q.done){
+    const pct=Math.round((q.score/q.qs.length)*100);
+    const emoji=pct>=80?'🏆':pct>=60?'👍':'💪';
+    const msg=pct>=80?'Luar biasa! Sudah hafal!':pct>=60?'Bagus! Terus berlatih!':'Semangat, ulangi lagi!';
+    const c=pct>=80?'#10b981':pct>=60?'#f59e0b':'#ef4444';
+    return h('div',{style:{maxWidth:'480px',margin:'0 auto',paddingBottom:'32px'}},
+      h('div',{style:{background:'#fff',borderRadius:'24px',padding:'28px',textAlign:'center',marginBottom:'16px',boxShadow:'0 8px 40px rgba(99,102,241,0.12)'}},
+        h('div',{style:{fontSize:'52px',marginBottom:'8px'}},emoji),
+        h('h2',{style:{fontSize:'20px',fontWeight:'800',color:'#1e1b4b',margin:'0 0 4px'}},msg),
+        h('p',{style:{color:'#94a3b8',fontSize:'13px',marginBottom:'20px'}},'Kuis selesai!'),
+        h('div',{style:{background:`${c}10`,border:`1.5px solid ${c}25`,borderRadius:'20px',padding:'20px 16px',marginBottom:'20px'}},
+          h('p',{style:{fontSize:'11px',fontWeight:'800',color:c,letterSpacing:'2px',margin:'0 0 4px'}},'SKOR AKHIR'),
+          h('div',{style:{fontSize:'56px',fontWeight:'900',color:c,lineHeight:'1'}},`${pct}`,h('span',{style:{fontSize:'20px',color:`${c}88`,fontWeight:'700'}},'/100')),
+          h('p',{style:{fontSize:'13px',color:'#64748b',marginTop:'6px'}},`${q.score} benar dari ${q.qs.length} soal`)
+        ),
+        h('button',{style:{width:'100%',padding:'14px',background:`linear-gradient(135deg,${c},${c}cc)`,border:'none',borderRadius:'14px',color:'#fff',fontWeight:'800',fontSize:'14px'},onClick:()=>{ST.quiz.setup=true;render();}},'🔄 Ulangi Kuis')
+      ),
+      q.wrongs.length>0?h('div',{style:{background:'rgba(255,255,255,0.8)',borderRadius:'20px',padding:'16px'}},
+        h('p',{style:{fontSize:'11px',fontWeight:'800',color:'#ef4444',letterSpacing:'1px',marginBottom:'10px'}},`⚠️ PERLU DIULANG (${q.wrongs.length})`),
+        h('div',{style:{display:'flex',flexDirection:'column',gap:'6px'}},
+          ...q.wrongs.map((w)=>h('div',{style:{background:'rgba(255,255,255,0.9)',borderRadius:'12px',padding:'10px 14px',border:'1px solid rgba(239,68,68,0.12)',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'10px'}},
+            h('div',{},h('span',{style:{fontSize:'14px',fontWeight:'800',color:'#dc2626',display:'block'}},w.item.pinyin),h('span',{style:{fontSize:'12px',color:'#475569'}},w.item.id)),
+            h('div',{style:{textAlign:'right'}},h('span',{style:{fontSize:'11px',color:'#94a3b8'}},'Jawabanmu:'),h('span',{style:{fontSize:'12px',color:'#ef4444',display:'block',fontWeight:'700'}},w.user||'(kosong)'))
+          ))
+        )
+      ):null
+    );
+  }
+
+  const item=VOCAB[q.qs[q.qi]];
+  const d=q.dir==='random'?q.curDir:q.dir;
+  const pct2=Math.round((q.qi/q.qs.length)*100);
+  const fbColor=q.correct===null?null:q.correct?'#10b981':'#ef4444';
+  const fbBg=q.correct===null?null:q.correct?'#f0fdf4':'#fef2f2';
+
+  const inp=document.createElement('input');
+  inp.type='text';
+  inp.value=q.ans;
+  inp.disabled=q.answered;
+  inp.placeholder=q.mode==='audio'||d==='id2pin'?'Ketik pinyin...':'Ketik terjemahan bahasa Indonesia...';
+  inp.autocomplete='off';inp.autocorrect='off';inp.autocapitalize='off';inp.spellcheck=false;
+  Object.assign(inp.style,{width:'100%',padding:'14px 16px',borderRadius:'16px',fontSize:'17px',fontWeight:'600',border:`2px solid ${q.answered?(q.correct?'#10b981':'#ef4444'):'#e2e8f0'}`,background:q.answered?(q.correct?'#f0fdf4':'#fef2f2'):'#fff',color:q.answered?(q.correct?'#065f46':'#991b1b'):'#1e1b4b',outline:'none',transition:'all 0.2s',boxSizing:'border-box'});
+  inp.addEventListener('input',e=>{ST.quiz.ans=e.target.value;});
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){if(!ST.quiz.answered)doCheck();else doNext();}});
+  setTimeout(()=>{if(!q.answered)inp.focus();},50);
+
+  function doCheck(){
+    if(ST.quiz.answered)return;
+    const qz=ST.quiz;const curItem=VOCAB[qz.qs[qz.qi]];
+    const dir=qz.mode==='audio'?'id2pin':(qz.dir==='random'?(Math.random()<0.5?'id2pin':'pin2id'):qz.dir);
+    ST.quiz.curDir=dir;
+    const user=norm(qz.ans);
+    let ok=false;
+    if(dir==='id2pin'||qz.mode==='audio'){ok=user===norm(curItem.pinyin);}
+    else{const alts=curItem.id.split(/[,\/]/).map(x=>norm(x));ok=alts.some(a=>user===a);}
+    ST.quiz.correct=ok;ST.quiz.answered=true;
+    if(ok)ST.quiz.score++;
+    else ST.quiz.wrongs=[...ST.quiz.wrongs,{item:curItem,user:qz.ans,d:dir}];
+    render();
+  }
+  function doNext(){
+    const qz=ST.quiz;
+    if(qz.qi+1>=qz.qs.length){ST.quiz.done=true;render();return;}
+    ST.quiz.qi++;ST.quiz.ans='';ST.quiz.answered=false;ST.quiz.correct=null;
+    render();
+    if(ST.quiz.mode==='audio')setTimeout(()=>speak(VOCAB[ST.quiz.qs[ST.quiz.qi]].pinyin),300);
+  }
+
+  const qCard=h('div',{style:{background:'#fff',borderRadius:'24px',padding:'24px',marginBottom:'14px',border:'1.5px solid #e2e8f0',boxShadow:'0 4px 20px rgba(99,102,241,0.08)',textAlign:'center',minHeight:'140px',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}});
+  if(q.mode==='audio'){
+    qCard.appendChild(h('p',{style:{fontSize:'11px',fontWeight:'800',color:'#6366f1',letterSpacing:'2px',marginBottom:'12px'}},'DENGARKAN → KETIK PINYIN'));
+    const ab=h('button',{style:{fontSize:'56px',background:'none',border:'none',lineHeight:'1'},onClick:()=>speak(item.pinyin)},'🔊');
+    qCard.appendChild(ab);
+    qCard.appendChild(h('p',{style:{fontSize:'12px',color:'#94a3b8',marginTop:'8px'}},'Ketuk untuk putar ulang'));
+  } else {
+    qCard.appendChild(h('p',{style:{fontSize:'11px',fontWeight:'800',color:'#6366f1',letterSpacing:'2px',marginBottom:'12px'}},d==='id2pin'?'BAHASA INDONESIA → PINYIN':'PINYIN → BAHASA INDONESIA'));
+    qCard.appendChild(h('p',{style:{fontSize:'28px',fontWeight:'800',color:'#1e1b4b',lineHeight:'1.3',textAlign:'center'}},d==='id2pin'?item.id:item.pinyin));
+  }
+
+  let actionRow;
+  if(!q.answered){
+    const checkBtn=h('button',{style:{flex:'1',padding:'14px',background:'linear-gradient(135deg,#6366f1,#8b5cf6)',border:'none',borderRadius:'14px',color:'#fff',fontWeight:'800',fontSize:'15px'},onClick:doCheck},'Cek Jawaban');
+    const skipBtn=h('button',{style:{padding:'14px 16px',background:'#f1f5f9',border:'1px solid #e2e8f0',borderRadius:'14px',fontWeight:'700',fontSize:'14px',color:'#94a3b8'},onClick:()=>{ST.quiz.answered=true;ST.quiz.correct=false;ST.quiz.wrongs=[...ST.quiz.wrongs,{item,user:'(dilewati)',d}];render();}},'Lewati');
+    actionRow=h('div',{style:{display:'flex',gap:'10px'}},checkBtn,skipBtn);
+  } else {
+    const nextBtn=h('button',{style:{flex:'1',padding:'14px',background:'linear-gradient(135deg,#6366f1,#8b5cf6)',border:'none',borderRadius:'14px',color:'#fff',fontWeight:'800',fontSize:'15px'},onClick:doNext},'Lanjut →');
+    actionRow=h('div',{style:{display:'flex',gap:'10px'}},nextBtn);
+  }
+
+  return h('div',{style:{maxWidth:'480px',margin:'0 auto',paddingBottom:'32px',position:'relative'}},
+    h('div',{style:{display:'flex',alignItems:'center',gap:'10px',marginBottom:'16px'}},
+      h('button',{style:{background:'none',border:'none',fontSize:'20px',padding:'4px'},onClick:()=>{ST.quiz.setup=true;render();}},'←'),
+      h('div',{style:{flex:'1'}},h('div',{style:{height:'6px',background:'#e2e8f0',borderRadius:'3px',overflow:'hidden'}},h('div',{style:{height:'6px',background:'linear-gradient(90deg,#6366f1,#8b5cf6)',borderRadius:'3px',width:`${pct2}%`,transition:'width 0.4s'}}))),
+      h('span',{style:{fontSize:'12px',fontWeight:'700',color:'#94a3b8',whiteSpace:'nowrap'}},`${q.qi+1}/100`)
+    ),
+    qCard,
+    h('div',{style:{marginBottom:'10px'}},inp),
+    q.answered?h('div',{style:{padding:'12px 16px',borderRadius:'14px',marginBottom:'12px',background:fbBg,border:`1px solid ${fbColor}30`,display:'flex',alignItems:'flex-start',gap:'10px'}},
+      h('span',{style:{fontSize:'18px'}},q.correct?'✅':'❌'),
+      h('div',{},
+        h('p',{style:{fontSize:'13px',fontWeight:'700',color:fbColor,margin:'0'}},q.correct?'Benar!':'Salah.'),
+        !q.correct?h('p',{style:{fontSize:'13px',color:'#475569',margin:'4px 0 0'}},`Jawaban: `,h('strong',{},d==='pin2id'?item.id:item.pinyin)):null
+      )
+    ):null,
+    actionRow
+  );
+}
+
+// ─── BROWSE ───
+function browseView(){
+  const b=ST.browse;
+  const list=b.q.trim()?VOCAB.filter(v=>v.pinyin.toLowerCase().includes(b.q.toLowerCase())||v.id.toLowerCase().includes(b.q.toLowerCase())):VOCAB;
+  const inp=document.createElement('input');
+  inp.type='text';inp.value=b.q;inp.placeholder='Cari pinyin atau bahasa Indonesia...';
+  Object.assign(inp.style,{width:'100%',padding:'13px 16px',borderRadius:'14px',border:'1.5px solid #e2e8f0',fontSize:'15px',marginBottom:'12px',outline:'none',background:'#fff',color:'#1e1b4b',boxSizing:'border-box'});
+  inp.addEventListener('input',e=>{ST.browse.q=e.target.value;render();});
+  const wrap=h('div',{style:{maxWidth:'480px',margin:'0 auto',paddingBottom:'32px'}},inp,
+    h('div',{style:{display:'flex',flexDirection:'column',gap:'4px'}},
+      ...list.map(v=>{
+        const sb=h('button',{style:{background:'none',border:'none',fontSize:'16px',color:'#6366f1',padding:'4px'},onClick:()=>speak(v.pinyin)},'🔊');
+        return h('div',{style:{display:'flex',alignItems:'center',gap:'12px',padding:'11px 14px',background:'rgba(255,255,255,0.7)',borderRadius:'12px',border:'1px solid rgba(99,102,241,0.08)'}},
+          h('span',{style:{fontSize:'11px',color:'#cbd5e1',minWidth:'24px',fontWeight:'700'}},String(v.no)),
+          h('span',{style:{fontWeight:'700',fontSize:'14px',color:'#1e1b4b',minWidth:'110px'}},v.pinyin),
+          h('span',{style:{fontSize:'13px',color:'#475569',flex:'1'}},v.id),
+          sb
+        );
+      })
+    )
+  );
+  return wrap;
+}
+
+render();
+</script>
+</body>
+</html>
